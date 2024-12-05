@@ -85,6 +85,10 @@ has_item(Item) :-
     inventory(Inv),
     member(Item, Inv).
 
+show_current_items :-
+    currentLocation(CurrentLocation),
+    show_items(CurrentLocation).
+
 show_items(Location) :-
     findall(Item, hasItem(Item,Location), Items),
     format('В ~w находятся следующие предметы: ~w.~n', [Location, Items]).

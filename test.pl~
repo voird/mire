@@ -2,7 +2,7 @@
 :- dynamic currentLocation/1.
 :- dynamic playerBalance/1.
 :- dynamic inventory/1.
-:- dynamic hasItem/3.
+:- dynamic hasItem/2.
 
 connected(city, park, north).
 connected(city, work, south).
@@ -20,10 +20,15 @@ job(work, job1, 50).
 job(work, job2, 30).
 job(cafe, job3, 20).
 
-hasItem(magazine, 10, city).
-hasItem(flower, 5, park).
-hasItem(documents, 20, work).
-hasItem(coffee, 15, cafe).
+hasItem(magazine, city).
+hasItem(flower, park).
+hasItem(documents, work).
+hasItem(coffee, cafe).
+
+itemValue(magazine, 10).
+itemValue(flower, 5).
+itemValue(documents, 20).
+itemValue(coffee, 15).
 
 move(_direction):-
     currentLocation(_current),
@@ -53,8 +58,9 @@ do_job(JobName):-
 
 take(Item):-
     currentLocation(Location),
-    hasItem(Item, Value, Location),
-    retract(hasItem(Item, Value, Location)),
+    hasItem(Item, Location),
+    itemValue(Item, Value),
+    retract(hasItem(Item, Location)),
     inventory(Inv),
     append(Inv, [Item], NewInv),
     retract(inventory(Inv)),
@@ -68,7 +74,7 @@ drop(Item):-
     retract(inventory(Inv)),
     assert(inventory(NewInv)),
     currentLocation(Location),
-    assert(hasItem(Item, Value, Location)),
+    assert(hasItem(Item, Location)),
     format('Вы положили ~w обратно в ~w.~n', [Item, Location]).
 
 show_inventory :-
@@ -80,7 +86,7 @@ has_item(Item) :-
     member(Item, Inv).
 
 show_items(Location) :-
-    findall(Item, hasItem(Item, _, Location), Items),
+    findall(Item, hasItem(Item,Location), Items),
     format('В ~w находятся следующие предметы: ~w.~n', [Location, Items]).
 
 
