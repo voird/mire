@@ -1,3 +1,5 @@
+location(main_door, 'Главная дверь замка').
+location(main_hall, 'Главный зал').
 location(throne_room, 'Тронный зал').
 location(kitchen, 'Кухня').
 location(cellar, 'Погреб').
@@ -106,20 +108,130 @@ inventory([]).
 :- dynamic hasItem/2.
 
 
+% Определение предметов
 item(main_door_key, 'Старый ключ от главной двери').
 item(kitchen_knife, 'Ржавый кухонный нож').
-item(library_book, 'Древняя книга').
+item(library_book, 'Древняя книга с заклинаниями').
+item(armor_shield, 'Тяжёлый щит из железа').
+item(alchemy_vial, 'Прозрачная бутылочка с магической жидкостью').
+item(ancient_scroll, 'Скрижали с древними рунами').
+item(gold_coin, 'Золотая монета с изображением короля').
+item(potion_of_healing, 'Зелье исцеления, излучающее свет').
+item(magic_ring, 'Магическое кольцо с голубым камнем').
+item(old_map, 'Старая карта, покрытая пятнами').
+item(enchanted_dagger, 'Волшебный кинжал с красной рукояткой').
+item(tapestry, 'Гобелен с изображением битвы').
+item(steel_sword, 'Кованый стальной меч, готовый к бою').
+item(guard_uniform, 'Форма стражника, покрытая пылью').
+item(chest_key, 'Маленький ключ от сундука').
+item(candle, 'Свеча с тусклым светом').
+item(herb_bag, 'Мешок с лечебными травами').
+item(wine_bottle, 'Бутылка старого вина').
+item(bed, 'Простая кровать с потертым покрывалом').
+item(wooden_staff, 'Деревянный посох, украшенный символами').
+item(cursed_amulet, 'Проклятый амулет с темной энергией').
+item(silver_ring, 'Серебряное кольцо с гравировкой').
+item(firewood, 'Кучка дров для костра').
+item(mysterious_painting, 'Таинственная картина на стене').
+item(broken_shield, 'Сломанный щит, не пригодный для боя').
+item(vintage_flute, 'Винтажная флейта из дерева').
+item(thick_book, 'Толстая книга с таинственными символами').
+item(ancient_coin, 'Древняя монета с изображением богини').
+item(bone_key, 'Ключ, сделанный из кости, с узором').
 
+% Указание, в каких комнатах находятся предметы
 hasItem(main_door_key, main_hall).
-hasItem(old_book, library).
+hasItem(kitchen_knife, kitchen).
+hasItem(library_book, library).
+hasItem(armor_shield, armory).
+hasItem(alchemy_vial, alchemy_lab).
+hasItem(ancient_scroll, chapel).
+hasItem(gold_coin, throne_room).
+hasItem(potion_of_healing, courtyard).
+hasItem(magic_ring, secret_passage).
+hasItem(old_map, lookout_tower).
+hasItem(enchanted_dagger, garden_maze).
+hasItem(tapestry, hall_of_mirrors).
+hasItem(steel_sword, armory).
+hasItem(guard_uniform, training_ground).
+hasItem(chest_key, abandoned_bedrooms).
+hasItem(candle, kitchen).
+hasItem(herb_bag, library).
+hasItem(wine_bottle, cellar).
+hasItem(bed, abandoned_bedrooms).
+hasItem(wooden_staff, chapel).
+hasItem(cursed_amulet, throne_room).
+hasItem(silver_ring, secret_passage).
+hasItem(firewood, courtyard).
+hasItem(mysterious_painting, hall_of_mirrors).
+hasItem(broken_shield, armory).
+hasItem(vintage_flute, library).
+hasItem(thick_book, library).
+hasItem(ancient_coin, chapel).
+hasItem(bone_key, prison).
 
+% Описание частей комнат
 room_part(main_hall, table, 'На массивном дубовом столе лежит старый ключ.').
 room_part(kitchen, counter, 'На столешнице лежит ржавый кухонный нож.').
-room_part(library, shelf, 'На полке стоит древняя книга.').
+room_part(library, shelf, 'На полке стоит древняя книга с заклинаниями.').
+room_part(armory, rack, 'На стеллаже висит тяжёлый железный щит.').
+room_part(alchemy_lab, shelf, 'На полке стоит прозрачная бутылочка с магической жидкостью.').
+room_part(chapel, altar, 'На алтаре лежат скрижали с древними рунами.').
+room_part(throne_room, floor, 'На полу лежит золотая монета с изображением короля.').
+room_part(courtyard, ground, 'На земле лежит зелье исцеления, излучающее свет.').
+room_part(secret_passage, wall, 'На стене висят магическое кольцо с голубым камнем.').
+room_part(lookout_tower, desk, 'На столе лежит старая карта, покрытая пятнами.').
+room_part(garden_maze, ground, 'На земле валяется волшебный кинжал с красной рукояткой.').
+room_part(hall_of_mirrors, wall, 'На стене висит гобелен с изображением битвы.').
+room_part(armory, weapon_rack, 'На оружейной стойке лежит кованый стальной меч.').
+room_part(training_ground, locker, 'В углу стоит форма стражника, покрытая пылью.').
+room_part(abandoned_bedrooms, chest, 'В сундуке лежит маленький ключ от сундука.').
+room_part(kitchen, shelf, 'На полке стоит свеча с тусклым светом.').
+room_part(library, shelf, 'На полке лежит мешок с лечебными травами.').
+room_part(cellar, shelf, 'На полке стоит бутылка старого вина.').
+room_part(abandoned_bedrooms, bed, 'На кровати лежит покрывало, старое и потрёпанное.').
+room_part(chapel, altar, 'На алтаре лежит деревянный посох с символами.').
+room_part(throne_room, pedestal, 'На пьедестале лежит проклятый амулет с темной энергией.').
+room_part(secret_passage, table, 'На столе лежит серебряное кольцо с гравировкой.').
+room_part(courtyard, fire, 'У костра лежат дрова для разведения огня.').
+room_part(hall_of_mirrors, wall, 'На стене висит таинственная картина с изображением света и тени.').
+room_part(armory, floor, 'На полу валяется сломанный щит, не пригодный для боя.').
+room_part(library, shelf, 'На полке стоит винтажная флейта из дерева.').
+room_part(library, shelf, 'На полке лежит толстая книга с таинственными символами.').
+room_part(chapel, altar, 'На алтаре лежит древняя монета с изображением богини.').
+room_part(prison, shelf, 'На полке лежит ключ, сделанный из кости, с узором.').
 
+% Привязка предметов к частям комнат
 item_in_part(main_hall, table, main_door_key).
 item_in_part(kitchen, counter, kitchen_knife).
 item_in_part(library, shelf, library_book).
+item_in_part(armory, rack, armor_shield).
+item_in_part(alchemy_lab, shelf, alchemy_vial).
+item_in_part(chapel, altar, ancient_scroll).
+item_in_part(throne_room, floor, gold_coin).
+item_in_part(courtyard, ground, potion_of_healing).
+item_in_part(secret_passage, wall, magic_ring).
+item_in_part(lookout_tower, desk, old_map).
+item_in_part(garden_maze, ground, enchanted_dagger).
+item_in_part(hall_of_mirrors, wall, tapestry).
+item_in_part(armory, weapon_rack, steel_sword).
+item_in_part(training_ground, locker, guard_uniform).
+item_in_part(abandoned_bedrooms, chest, chest_key).
+item_in_part(kitchen, shelf, candle).
+item_in_part(library, shelf, herb_bag).
+item_in_part(cellar, shelf, wine_bottle).
+item_in_part(abandoned_bedrooms, bed, bed).
+item_in_part(chapel, altar, wooden_staff).
+item_in_part(throne_room, pedestal, cursed_amulet).
+item_in_part(secret_passage, table, silver_ring).
+item_in_part(courtyard, fire, firewood).
+item_in_part(hall_of_mirrors, wall, mysterious_painting).
+item_in_part(armory, floor, broken_shield).
+item_in_part(library, shelf, vintage_flute).
+item_in_part(library, shelf, thick_book).
+item_in_part(chapel, altar, ancient_coin).
+item_in_part(prison, shelf, bone_key).
+
 
 look(Part) :-
     currentLocation(Location),
