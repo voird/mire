@@ -38,8 +38,8 @@ description(hall_of_mirrors, 'Зал с рядами зеркал. В некот
 connected(main_door, main_hall, south).
 connected(main_hall, main_door, north).
 
-connected(main_hall, throne_room, north).
-connected(throne_room, main_hall, south).
+connected(main_hall, throne_room, west).
+connected(throne_room, main_hall, east).
 
 connected(main_hall, kitchen, east).
 connected(kitchen, main_hall, west).
@@ -47,14 +47,14 @@ connected(kitchen, main_hall, west).
 connected(kitchen, cellar, down).
 connected(cellar, kitchen, up).
 
-connected(cellar, prison, north).
-connected(prison, cellar, south).
+%connected(cellar, prison, north).
+%connected(prison, cellar, south).
 
 connected(prison, secret_passage, east).
 connected(secret_passage, prison, west).
 
-connected(throne_room, secret_passage, east).
-connected(secret_passage, throne_room, west).
+%connected(throne_room, secret_passage, east).
+%connected(secret_passage, throne_room, west).
 
 connected(main_hall, courtyard, south).
 connected(courtyard, main_hall, north).
@@ -62,8 +62,8 @@ connected(courtyard, main_hall, north).
 connected(courtyard, garden_maze, east).
 connected(garden_maze, courtyard, west).
 
-connected(main_hall, library, west).
-connected(library, main_hall, east).
+connected(main_hall, library, up).
+connected(library, main_hall, down).
 
 connected(library, lookout_tower, north).
 connected(lookout_tower, library, south).
@@ -74,32 +74,32 @@ connected(armory, library, east).
 connected(armory, training_ground, north).
 connected(training_ground, armory, south).
 
-connected(training_ground, courtyard, west).
-connected(courtyard, training_ground, east).
+%connected(training_ground, courtyard, west).
+%connected(courtyard, training_ground, east).
 
 connected(kitchen, alchemy_lab, north).
 connected(alchemy_lab, kitchen, south).
 
-connected(alchemy_lab, library, west).
-connected(library, alchemy_lab, east).
+%connected(alchemy_lab, library, west).
+%connected(library, alchemy_lab, east).
 
-connected(main_hall, chapel, east).
-connected(chapel, main_hall, west).
+connected(main_hall, chapel, down).
+connected(chapel, main_hall, up).
 
-connected(chapel, prison, north).
-connected(prison, chapel, south).
+connected(chapel, prison, east).
+connected(prison, chapel, west).
 
 connected(throne_room, abandoned_bedrooms, west).
 connected(abandoned_bedrooms, throne_room, east).
 
-connected(abandoned_bedrooms, secret_passage, north).
-connected(secret_passage, abandoned_bedrooms, south).
+%connected(abandoned_bedrooms, secret_passage, north).
+%connected(secret_passage, abandoned_bedrooms, south).
 
 connected(throne_room, hall_of_mirrors, south).
 connected(hall_of_mirrors, throne_room, north).
 
-connected(hall_of_mirrors, secret_passage, west).
-connected(secret_passage, hall_of_mirrors, east).
+%connected(hall_of_mirrors, secret_passage, west).
+%connected(secret_passage, hall_of_mirrors, east).
 
 :- dynamic currentLocation/1.
 currentLocation(main_hall).
@@ -280,8 +280,7 @@ move(_) :-
     write('Вы не можете двигаться в этом направлении!'), nl.
 
 current_location :-
-    currentLocation(Current),
-    format('Вы находитесь в ~w.~n', [Current]).
+    currentLocation(Current).
 
 run :-
     write('Добро пожаловать в игру!'), nl,
