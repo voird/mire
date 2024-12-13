@@ -26,8 +26,7 @@
             *out* (io/writer out)
             *err* (io/writer System/err)]
 
-    ;; We have to nest this in another binding call instead of using
-    ;; the one above so *in* and *out* will be bound to the socket
+    ;; Мы обрабатываем ввод имени игрока
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref (@rooms/rooms :start))
@@ -36,8 +35,13 @@
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*))
 
-      (println (commands/look)) (print player/prompt) (flush)
+      ;; Показываем список предметов сразу после ввода имени
+      (println (commands/look-items)) ;; Выводим сгенерированный список предметов
 
+      (println (commands/look)) ;; Показываем окружение
+      (print player/prompt) (flush)
+
+      ;; Начинаем основной игровой цикл
       (try (loop [input (read-line)]
              (when input
                (println (commands/execute input))
@@ -45,6 +49,8 @@
                (print player/prompt) (flush)
                (recur (read-line))))
            (finally (cleanup))))))
+
+
 
 (defn -main
   ([port dir]
