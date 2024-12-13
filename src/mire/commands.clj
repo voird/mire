@@ -90,18 +90,21 @@
                       (dissoc (ns-publics 'mire.commands)
                               'execute 'commands))))
 
-
 (def possible-items ["key" "sword" "map" "potion" "shield" "treasure chest" "scroll" "gemstone"])
 
-(def found-items (atom #{}))  ; Keeps track of items that the player has found
+(def found-items (atom nil))  ;; Храним сгенерированный список, начальное значение - nil
 
 (defn look-items
-  "Generate a random list of items the player needs to find."
+  "Show the list of items the player needs to find. Generate it only once per session."
   []
-  (let [items-to-find (take 3 (shuffle possible-items))]  ; Randomly choose 3 items
-    (reset! found-items items-to-find)
+  (if (nil? @found-items)  ;; Если список еще не сгенерирован
+    (let [items-to-find (take 3 (shuffle possible-items))]  ;; Случайно выбираем 3 предмета
+      (reset! found-items items-to-find)  ;; Сохраняем список в атом
+      (str "You need to find the following items:\n"
+           (str/join "\n" items-to-find)))  ;; Возвращаем строку с предметами
+    ;; Если список уже существует
     (str "You need to find the following items:\n"
-         (str/join "\n" items-to-find))))
+         (str/join "\n" @found-items))))  ;; Просто возвращаем существующий список
 
 
 ;; Command data
