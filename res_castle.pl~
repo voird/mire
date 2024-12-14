@@ -331,10 +331,10 @@ del(X, [Y|L1], [Y|L2]) :- del(X, L1, L2).
 
 
 need_to(goblin, gold_coin).
-need_to(gnome, wooden_staff).
-need_to(dwarf, armor_shield ).
-need_to(knight, steel_sword).
-need_to(wizard, ancient_scroll).
+need_to(gnome, main_door_key).
+need_to(dwarf, kitchen_knife).
+need_to(knight, armor_shield).
+need_to(wizard, alchemy_vial).
 
 
 
