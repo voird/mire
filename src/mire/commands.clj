@@ -1,7 +1,8 @@
 (ns mire.commands
   (:require [clojure.string :as str]
             [mire.rooms :as rooms]
-            [mire.player :as player]))
+            [mire.player :as player]
+            [clojure.set :as set]))
 
 (defn- move-between-refs
   "Move one instance of obj between from and to. Must call in a transaction."
@@ -19,7 +20,6 @@
        (str/join "\n" (map #(str "There is " % " here.\n")
                            @(:items @player/*current-room*)))))
 
-
 (defn move
   "\"♬ We gotta get out of this place... ♪\" Give a direction."
   [direction]
@@ -35,25 +35,21 @@
          (look))
        "You can't go that way."))))
 
-(def possible-items [:keys :sword :map :potion :shield :treasure-chest :scroll :gemstone])
 
-(def found-items (atom nil))  ;; Храним сгенерированный список, начальное значение - nil
-(def found-items-set (atom #{}))  ;; Множество найденных предметов
+(defn generate-random-items
+  "Генерирует случайный список предметов для игрока."
+  [available-items num-items]
+  (set (take num-items (shuffle available-items))))
 
-(def game-over? (atom false))  ;; Переменная, указывающая на завершение игры
-
-
-(defn look-items
-  "Show the list of items the player needs to find. Generate it only once per session."
+(defn initialize-player-items
+  "Инициализирует список предметов для игрока."
   []
-  (if (nil? @found-items)  ;; Если список еще не сгенерирован
-    (let [items-to-find (take 3 (shuffle possible-items))]  ;; Случайно выбираем 3 предмета
-      (reset! found-items items-to-find)  ;; Сохраняем список в атом
-      (str "You need to find the following items:\n"
-           (str/join "\n" items-to-find)))  ;; Возвращаем строку с предметами
-    ;; Если список уже существует
-    (str "You need to find the following items:\n"
-         (str/join "\n" @found-items))))  ;; Просто возвращаем существующий список
+  (let [available-items #{:keys :detector :bunny :turtle :map :flashlight}
+        num-items (+ (rand-int 3) 2) ; случайное количество предметов от 2 до 4
+        items (generate-random-items available-items num-items)]
+    (dosync
+      (ref-set player/*inventory* items)
+      items)))
 
 
 (defn grab
@@ -61,16 +57,16 @@
   [thing]
   (dosync
    (if (rooms/room-contains? @player/*current-room* thing)
-     (if (contains? @found-items (name thing))
-       (do
-         (swap! found-items-set conj (name thing))  ;; Добавляем предмет в найденные
-         (if (= (count @found-items-set) (count @found-items))  ;; Проверяем, все ли предметы найдены
-           (do
-             (reset! game-over? true)  ;; Завершаем игру
-             (str "Congratulations, " player/*name* ", you found all the items! You win!"))
-           (str "You picked up the " thing ".")))
-       (str "That is not part of the list of items you need to find."))  ;; Обработка неверного предмета
-     (str "There isn't any " thing " here."))))  ;; Обработка отсутствующего предмета
+     (do
+       (move-between-refs (keyword thing)
+                          (:items @player/*current-room*)
+                          player/*inventory*)
+       (let [total-items (initialize-player-items) ; инициализируем список всех предметов
+             all-items (deref player/*inventory*)] ; получаем предметы игрока
+         (if (= all-items total-items)
+           (str "You picked up the " thing ". You've collected all items! Game Over. Winner: " player/*name*)
+           (str "You picked up the " thing "."))))
+     (str "There isn't any " thing " here."))))
 
 
 (defn discard
@@ -81,26 +77,24 @@
      (do (move-between-refs (keyword thing)
                             player/*inventory*
                             (:items @player/*current-room*))
-         (str "You dropped the " thing "."))  ;; Предмет был отброшен
-     (str "You're not carrying a " thing "."))))  ;; Предмет не найден в инвентаре
+         (str "You dropped the " thing "."))
+     (str "You're not carrying a " thing "."))))
 
 (defn inventory
   "See what you've got."
   []
   (str "You are carrying:\n"
-       (str/join "\n" (seq @player/*inventory*))))  ;; Возвращает список предметов в инвентаре
+       (str/join "\n" (seq @player/*inventory*))))
 
 (defn detect
   "If you have the detector, you can see which room an item is in."
   [item]
   (if (@player/*inventory* :detector)
-    (let [room (first (filter #((:items %) (keyword item))
-                             (vals @rooms/rooms)))]
-      (if room
-        (str item " is in " (:name room))
-        (str item " is not in any room.")))
+    (if-let [room (first (filter #((:items %) (keyword item))
+                                 (vals @rooms/rooms)))]
+      (str item " is in " (:name room))
+      (str item " is not in any room."))
     "You need to be carrying the detector for that."))
-
 
 (defn say
   "Say something out loud so everyone in the room can hear."
@@ -113,30 +107,32 @@
         (println player/prompt)))
     (str "You said " message)))
 
+
+
 (defn help
   "Show available commands and what they do."
   []
-  (str/join "\n" (map #(str (key %) ": " (:doc (meta (val %)))))
-            (dissoc (ns-publics 'mire.commands)
-                    'execute 'commands)))  ;; Moved here
-
+  (str/join "\n" (map #(str (key %) ": " (:doc (meta (val %))))
+                      (dissoc (ns-publics 'mire.commands)
+                              'execute 'commands))))
 
 ;; Command data
+
 (def commands {"move" move,
                "north" (fn [] (move :north)),
                "south" (fn [] (move :south)),
                "east" (fn [] (move :east)),
                "west" (fn [] (move :west)),
-               "grab" grab,
-               "discard" discard,
-               "inventory" inventory,
-               "detect" detect,
-               "look" look,
-               "say" say,
-               "help" help,
-               "look-items" look-items})
+               "grab" grab
+               "discard" discard
+               "inventory" inventory
+               "detect" detect
+               "look" look
+               "say" say
+               "help" help})
 
 ;; Command handling
+
 (defn execute
   "Execute a command that is passed to us."
   [input]
