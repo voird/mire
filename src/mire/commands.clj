@@ -35,7 +35,7 @@
          (look))
        "You can't go that way."))))
 
-(def possible-items ["key" "sword" "map" "potion" "shield" "treasure chest" "scroll" "gemstone"])
+(def possible-items [:keys :sword :map :potion :shield :treasure-chest :scroll :gemstone])
 
 (def found-items (atom nil))  ;; Храним сгенерированный список, начальное значение - nil
 (def found-items-set (atom #{}))  ;; Множество найденных предметов
