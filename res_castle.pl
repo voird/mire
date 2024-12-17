@@ -329,8 +329,9 @@ run :-
     write('4. take(Item) - take an item.'), nl,
     write('5. show_inventory - show inventory.'), nl,
     write('6. show_location - show current location.'), nl,
-    write('7. talk_to(NPC) - you can talk to NPC.'), nl,
-    write('8. give(NPC, Item) - you give item to the NPC.'), nl,
+    write('7. who_is_here - checking NPC in a location.'), nl,
+    write('8. talk_to(NPC) - you can talk to NPC.'), nl,
+    write('9. give(NPC, Item) - you give item to the NPC.'), nl,
     write('Good luck on your adventure!'), nl, current_location.
 
 
