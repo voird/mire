@@ -1,3 +1,5 @@
+%Р›РѕРєР°С†РёРё
+
 location(main_door, 'Main lock door').
 location(main_hall, 'Main Hall').
 location(throne_room, 'Throne Room').
@@ -16,6 +18,7 @@ location(chapel, 'Chapel').
 location(abandoned_bedrooms, 'Abandoned bedrooms').
 location(hall_of_mirrors, 'Hall of Mirrors').
 
+%РћРїРёСЃР°РЅРёСЏ
 
 description(main_door, 'A huge wooden gate with metal strips and a massive bolt. A cold wind comes through the cracks.').
 description(main_hall, 'A spacious hall with a high vaulted ceiling, decorated with tapestries. In the center stands a massive oak table.').
@@ -35,6 +38,7 @@ description(chapel, 'Stone prayer hall with altar and old fresco. Secret door hi
 description(abandoned_bedrooms, 'A row of old rooms with dust and cobwebs. Claw marks are visible on the beds. In one of the rooms, among the collapsed furniture, there is a large, old wooden chest.').
 description(hall_of_mirrors, 'A hall with rows of mirrors. In some of them, moving reflections are visible. It seems that the wall is somewhere very far away, beyond the limits of visibility.').
 
+%РЎРІСЏР·Рё Р»РѕРєР°С†РёР№
 
 connected(main_door, main_hall, south).
 connected(main_hall, main_door, north).
@@ -84,6 +88,7 @@ connected(abandoned_bedrooms, throne_room, east).
 connected(throne_room, hall_of_mirrors, south).
 connected(hall_of_mirrors, throne_room, north).
 
+%Р”РёРЅР°РјРёРєРё
 
 :- dynamic currentLocation/1.
 currentLocation(main_hall).
@@ -92,7 +97,8 @@ inventory([]).
 :- dynamic hasItem/2.
 
 
-% Определение предметов
+% РџСЂРµРґРјРµС‚С‹ Рё РёС… РѕРїРёСЃР°РЅРёРµ
+
 item(main_door_key, 'An old key to the main door').
 item(kitchen_knife, 'A rusty kitchen knife').
 item(library_book, 'Ancient spellbook').
@@ -125,7 +131,8 @@ item(bone_key, 'A key made of bone, with a pattern').
 item(broken_quill, 'Quill with a broken tip').
 
 
-% Указание, в каких комнатах находятся предметы
+% РЎРІСЏР·СЊ РїСЂРµРґРјРµС‚Р° Рё Р»РѕРєР°С†РёРё
+
 hasItem(main_door_key, main_hall).
 hasItem(kitchen_knife, kitchen).
 hasItem(candle, kitchen).
@@ -157,7 +164,8 @@ hasItem(bed, abandoned_bedrooms).
 hasItem(wine_bottle, cellar).
 hasItem(bone_key, prison).
 
-% Описание частей комнат
+% РћР±СЉРµРєС‚С‹ РІ РєРѕРјРЅР°С‚Р°С…
+
 room_part(main_hall, table, 'On the massive oak table lies an old key.').
 room_part(kitchen, counter, 'On the countertop lies a rusty kitchen knife.').
 room_part(kitchen, shelf, 'There is a dimly lit candle on the shelf.').
@@ -183,7 +191,8 @@ room_part(cellar, shelf, 'There is a bottle of old wine on the shelf.').
 room_part(abandoned_bedrooms, bed, 'There is a bedspread on the bed, old and tattered.').
 room_part(prison, shelf, 'There is a key made of bone with a pattern on the shelf.').
 
-% Привязка предметов к частям комнат
+% РЎРІСЏР·СЊ РїСЂРµРґРјРµС‚Р° Рё РѕР±СЉРµРєС‚Р°
+
 item_in_part(main_hall, table, main_door_key).
 item_in_part(kitchen, counter, kitchen_knife).
 item_in_part(kitchen, shelf, candle).
@@ -215,13 +224,14 @@ item_in_part(abandoned_bedrooms, bed, bed).
 item_in_part(cellar, shelf, wine_bottle).
 item_in_part(prison, shelf, bone_key).
 
+%Р—Р°РєСЂС‹С‚С‹Рµ Р»РѕРєР°С†РёРё
 requires_key(throne_room, bone_key).
 requires_key(secret_passage, old_map).
 requires_key(alchemy_lab, thick_book).
 requires_key(training_ground, chest_key).
 
 
-
+%Р¤СѓРЅРєС†РёСЏ РѕСЃРјРѕС‚СЂР°
 look(Part) :-
     clear,
     currentLocation(Location),
@@ -244,6 +254,8 @@ look :-
     description(Current, RoomDescription),
     format('~w~n', [RoomDescription]).
 
+%РџРѕРґР±РѕСЂ РїСЂРµРґРјРµС‚Р°
+
 take(Item) :-
     clear,
     currentLocation(Location),
@@ -259,6 +271,8 @@ take(Item) :-
 take(_) :-
     write('You cant take this item here!'), nl.
 
+% РџСЂРѕСЃРјРѕС‚СЂ РёРЅРІРµРЅС‚Р°СЂСЏ
+
 show_inventory :-
     clear,
     inventory(Inv),
@@ -268,6 +282,7 @@ show_inventory :-
         format('Your inventory: ~w~n', [Inv])
     ).
 
+% РџРµСЂРµРґРІРёР¶РµРЅРёРµ 
 move(Direction) :-
     clear,
     currentLocation(Current),
@@ -292,7 +307,7 @@ move(Direction) :-
 
 move(_) :-
     write('You cannot move in this direction!'), nl.
-
+% Р›РѕРєР°С†РёРё Рё РёС… СЃРІСЏР·Рё С„СѓРЅРєС†РёСЏ
 current_location :-
     currentLocation(Current).
 
@@ -303,7 +318,7 @@ show_location :-
 show_location :-
     write('You have not selected a location yet.'), nl.
 
-
+% Р—Р°РїСѓСЃРє РёРіСЂС‹
 run :-
         clear,
     write('Welcome to the game!'), nl,
